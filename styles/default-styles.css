@@ -1,0 +1,153 @@
+* {
+	font-family: 'Roboto', sans-serif;
+}
+
+body {
+	background: #eeeeee;
+	font-family: tahoma, verdana, sans-serif;
+	margin: 0;
+	font-family: 'Roboto', sans-serif;
+}
+
+canvas {
+	width: 100%;
+	height: 100%;
+	outline: none;
+	border: none;
+	background: #fafafa;
+	margin: 0;
+	padding: 0;
+	position: fixed;
+}
+
+#eqSliders{
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+
+	color: white;
+}
+#eqSliders>section{
+	width: calc(100% / 8);
+	height: 30rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+#eqSliders>section>*{
+	transform: rotate(-90deg);
+}
+#eqSliders>section>label{
+	width: 15vh;
+	height: 15vh;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	margin-top: 1rem;
+}
+#eqSliders>section>input{
+	width: 35vh;
+	height: 35vh;
+}
+
+
+#playbackControls{
+	width: 100%;
+	position: fixed;
+	bottom: 0;
+	height: 5rem;
+	background-color: rgba(0, 0, 0, 0.75);
+	margin: 0;
+	padding: 0;
+
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	align-content: center;
+
+	color: white;
+
+	transition: opacity 0.5s;
+}
+#playbackControls[data-hidden="true"]{
+	opacity: 0;
+}
+
+#playbackControls button{
+	color: white;
+	background-color: rgba(0, 0, 0, 0);
+	border: none;
+	outline: none;
+	cursor: pointer;
+	font-size: 4rem;
+	height: 100%;
+	width: 4rem;
+	line-height: 100%;
+	margin: 0;
+	
+	font-family: sans-serif;
+}
+#playbackControls>section{
+	height: 100%;
+	line-height: 100%;
+	margin: 0;
+	padding: 0rem 1rem 0rem 1rem;
+}
+#playbackControls>#volumeControls{
+	margin-right: auto;
+	display: flex;
+	align-items: center;
+}
+#playbackControls>#options{
+	margin-left: auto;
+}
+#playbackControls>#trackControls{
+	z-index: 10;
+	position: absolute;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+#trackControls>select{
+	width: 8rem;
+	margin: 0;
+}
+
+#volumeIndicator{
+	transform: scale(-1, 1);
+	width: 6rem;
+}
+#volumeIndicator[data-muted="true"]{
+	color: dimgray;
+}
+
+#controls{
+  margin-left: 1rem;
+}
+
+#volumeLabel{
+  margin-left: 1rem;
+}
+
+section{
+  margin-bottom: 1rem;
+}
+
+#playButton{
+  font-size: 1.2rem;
+  width: 6rem;
+}
+
+#fsButton{
+  font-size: 1.2rem;
+  width: 8rem;
+}
