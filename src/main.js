@@ -6,7 +6,7 @@ import * as playback from "./playbackControls.js";
 // 1 - here we are faking an enumeration
 const DEFAULTS = Object.freeze({
 	//sound1  :  "/media/mozart-symphony40-1.mp3"
-	sound1: "/media/New Adventure Theme.mp3"
+	sound1: "./media/New Adventure Theme.mp3"
 });
 
 const DRAW_PARAMS = {
