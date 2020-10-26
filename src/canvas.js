@@ -54,7 +54,9 @@ function draw(drawParams = {}, spectrumSections = {}, waveData){
 	drawTrailBases(drawParams, spectrumSections);
 
 	//Draw the oscilloscope/waveform in the center of the screen
-	drawWaveform(drawParams, waveData);
+	if (drawParams.showWaveform){
+		drawWaveform(drawParams, waveData);
+	}
 		
 	applyFilters(ctx, drawParams);
 }

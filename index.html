@@ -1,81 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="utf-8" />
-	<title>Audio Visualizer</title>
-	<link href="styles/default-styles.css" type="text/css" rel="stylesheet" />
-	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap" rel="stylesheet">
-	<script src="./src/main.js" type="module"></script>
-</head>
-<body>
-<main>
-	<canvas width="800" height="400"></canvas>
+	<head>
+		<meta charset="utf-8" />
+		<title>Audio Visualizer</title>
+		<link href="styles/default-styles.css" type="text/css" rel="stylesheet" />
+		<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap" rel="stylesheet">
+		<!-- Font Awesome, a library for adding text icons without font dependence -->
+		<script src="https://kit.fontawesome.com/f5d047bae8.js" crossorigin="anonymous"></script>
+		<script src="./src/main.js" type="module"></script>
+	</head>
+	<body>
+		<main>
+			<canvas width="800" height="400"></canvas>
 
-	<!-- <section id="eqSliders">
-		<section id="subBassEQ">
-			<input type="range" id="subBassSlider" name="subBassSlider" min="0" max="2" value="1" step="0.01">
-			<label for="subBassSlider">SUB BASS</label>
-		</section>
-		<section id="bassEQ">
-			<input type="range" id="bassSlider" name="bassSlider" min="0" max="2" value="1" step="0.01">
-			<label for="bassSlider">BASS</label>
-		</section>
-		<section id="lowMidEQ">
-			<input type="range" id="lowMidSlider" name="lowMidSlider" min="0" max="2" value="1" step="0.01">
-			<label for="lowMidSlider">LOW MID</label>
-		</section>
-		<section id="midEQ">
-			<input type="range" id="midSlider" name="midSlider" min="0" max="2" value="1" step="0.01">
-			<label for="midSlider">MID</label>
-		</section>
-		<section id="highMidEQ">
-			<input type="range" id="highMidSlider" name="highMidSlider" min="0" max="2" value="1" step="0.01">
-			<label for="highMidSlider">HIGH MID</label>
-		</section>
-		<section id="trebleEQ">
-			<input type="range" id="trebleSlider" name="trebleSlider" min="0" max="2" value="1" step="0.01">
-			<label for="trebleSlider">TREBLE</label>
-		</section>
-		<section id="brillianceEQ">
-			<input type="range" id="brillianceSlider" name="brillianceSlider" min="0" max="2" value="1" step="0.01">
-			<label for="brillianceSlider">BRILLIANCE</label>
-		</section>
-		
-	</section> -->
+			<!-- <section id="eqSliders">
+				<section id="subBassEQ">
+					<input type="range" id="subBassSlider" name="subBassSlider" min="0" max="2" value="1" step="0.01">
+					<label for="subBassSlider">SUB BASS</label>
+				</section>
+				<section id="bassEQ">
+					<input type="range" id="bassSlider" name="bassSlider" min="0" max="2" value="1" step="0.01">
+					<label for="bassSlider">BASS</label>
+				</section>
+				<section id="lowMidEQ">
+					<input type="range" id="lowMidSlider" name="lowMidSlider" min="0" max="2" value="1" step="0.01">
+					<label for="lowMidSlider">LOW MID</label>
+				</section>
+				<section id="midEQ">
+					<input type="range" id="midSlider" name="midSlider" min="0" max="2" value="1" step="0.01">
+					<label for="midSlider">MID</label>
+				</section>
+				<section id="highMidEQ">
+					<input type="range" id="highMidSlider" name="highMidSlider" min="0" max="2" value="1" step="0.01">
+					<label for="highMidSlider">HIGH MID</label>
+				</section>
+				<section id="trebleEQ">
+					<input type="range" id="trebleSlider" name="trebleSlider" min="0" max="2" value="1" step="0.01">
+					<label for="trebleSlider">TREBLE</label>
+				</section>
+				<section id="brillianceEQ">
+					<input type="range" id="brillianceSlider" name="brillianceSlider" min="0" max="2" value="1" step="0.01">
+					<label for="brillianceSlider">BRILLIANCE</label>
+				</section>
+				
+			</section> -->
 
-	<section id="playbackControls">
-		<section id="volumeControls">
-			<button id="volumeIndicator" data-muted="false">&#x1F569;</button>
-			<input type="range" id="volumeSlider" min="0" max="2" value="0.5" step="0.01">
-		</section>
-		<section id="trackControls">
-			<p>Drag and drop anywhere or select   </p>
-			<select id="trackSelect">
-				<option value="./media/New Adventure Theme.mp3" selected>New Adventure Theme</option>
-				<option value="./media/Peanuts Theme.mp3">Peanuts Theme</option>
-				<option value="./media/The Picard Song.mp3">The Picard Song</option>
-			</select>
-			<button id="playButton" data-playing="no">&#11208;</button>
-			<!-- <button id="previousTrackButton">&#x23EE;</button>
-			<button id="nextTrackButton">⏭</button> -->
+			<section id="playbackControls">
+				<section id="volumeControls">
+					<button id="volumeIndicator" data-muted="false"><i class='fas fa-volume-down'></i></button>
+					<input type="range" id="volumeSlider" min="0" max="2" value="0.5" step="0.01">
+				</section>
+				<section id="trackControls">
+					<p>Drag and drop anywhere or select   </p>
+					<select id="trackSelect">
+						<option value="./media/New Adventure Theme.mp3" selected>New Adventure Theme</option>
+						<option value="./media/Peanuts Theme.mp3">Peanuts Theme</option>
+						<option value="./media/The Picard Song.mp3">The Picard Song</option>
+					</select>
+					<button id="playButton" data-playing="no"><i class="fas fa-play"></i></button>
+				</section>
+				<section id="options">
+					<button id="fullscreenButton"><i class="fas fa-expand"></i></button>
+					<button id="menuButton"><i class="fas fa-bars"></i></button>
+				</section>
 
-		</section>
-		<section id="options">
-			<button id="fullscreenButton">&#9974;</button>
-			<button id="menuButton">&#9776;</button>
-		</section>
-	</section>
+			</section>
 
-	<div id="controls" hidden>
-		<section>
-			<span><input type="checkbox" id="gradientCB" checked><label for="gradientCB">Show Gradient</label></span>
-			<span><input type="checkbox" id="barsCB" checked><label for="barsCB">Show Bars</label></span>
-			<span><input type="checkbox" id="circlesCB" checked><label for="circlesCB">Show Circles</label></span>
-			<span><input type="checkbox" id="noiseCB"><label for="noiseCB">Show Noise</label></span>
-			<span><input type="checkbox" id="invertCB"><label for="invertCB">Invert Colors</label></span>
-			<span><input type="checkbox" id="embossCB"><label for="embossCB">Emboss</label></span>
-		</section>
-	</div>
-</main>
-</body>
+			<section id="menu" data-hidden="true">
+				<span><input type="checkbox" id="waveformCB" checked><label for="waveformCB">Show Waveform</label></span>
+				<span><input type="checkbox" id="noiseCB"><label for="noiseCB">Show Noise</label></span>
+				<span><input type="checkbox" id="invertCB"><label for="invertCB">Invert Colors</label></span>
+				<span><input type="checkbox" id="embossCB"><label for="embossCB">Emboss</label></span>
+
+				<button id="closeMenuButton"><i class="fas fa-times"></i></button>
+			</section>
+		</main>
+	</body>
 </html>

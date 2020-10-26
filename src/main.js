@@ -1,7 +1,7 @@
 import * as audio from "./audio.js";
 import * as utils from "./utils.js";
 import * as canvas from "./canvas.js";
-import * as playback from "./playbackControls.js";
+import * as playback from "./controls.js";
 
 // 1 - here we are faking an enumeration
 const DEFAULTS = Object.freeze({
@@ -10,9 +10,7 @@ const DEFAULTS = Object.freeze({
 });
 
 const DRAW_PARAMS = {
-	showGradient		: true,
-	showBars			: true,
-	showCircles			: true,
+	showWaveform		: true,
 	showNoise			: false,
 	invert				: false,
 	emboss				: false,
@@ -38,7 +36,7 @@ const SPECTRUM_SECTIONS = {
 	mid						: {frequency	: 2000, 	color: "#7119ff",		value: 0,	prevValue: 0},
 	highMid					: {frequency	: 4000, 	color: "#5e19ff",		value: 0,	prevValue: 0},
 	treble					: {frequency	: 6000, 	color: "#4719ff",		value: 0,	prevValue: 0},
-	brilliance 				: {frequency	: 48000, 	color: "#2419ff",		value: 0,	prevValue: 0},
+	brilliance 				: {frequency	: 48000, 	color: "#2419ff",		value: 0,	prevValue: 0}
 }
 
 window.onload = function(e){
@@ -52,6 +50,8 @@ function init(){
 
 	audio.init(DEFAULTS.sound1);
 	audio.SOUND_PARAMS.sampleRate = audio.audioCtx.sampleRate;
+	//Update brilliance frequency stop so avoid errors with sound chips that don't have that high of a frequency
+	SPECTRUM_SECTIONS.brilliance.frequemcy = audio.SOUND_PARAMS.sampleRate;
 	
 	let canvasElement = document.querySelector("canvas"); // hookup <canvas> element
 	setupUI(canvasElement);
@@ -85,53 +85,6 @@ function setupUI(canvasElement){
 			playback.playButton.dispatchEvent(new Event("click"));
 		}
 	}
-
-	//Gradient
-	let gradientCB = document.querySelector("#gradientCB");
-	gradientCB.onchange = function(e){
-		DRAW_PARAMS.showGradient = gradientCB.checked;
-	}
-	gradientCB.dispatchEvent(new Event("change"));
-
-	//Bars
-	let barsCB = document.querySelector("#barsCB");
-	barsCB.onchange = function(e){
-		DRAW_PARAMS.showBars = barsCB.checked;
-	}
-	barsCB.dispatchEvent(new Event("change"));
-
-	//Circles
-	let circlesCB = document.querySelector("#circlesCB");
-	circlesCB.onchange = function(e){
-		DRAW_PARAMS.showCircles = circlesCB.checked;
-	}
-	circlesCB.dispatchEvent(new Event("change"));
-
-	//Noise
-	let noiseCB = document.querySelector("#noiseCB");
-	noiseCB.onchange = function(e){
-		DRAW_PARAMS.showNoise = noiseCB.checked;
-	}
-	noiseCB.dispatchEvent(new Event("change"));
-
-	//Invert
-	let invertCB = document.querySelector("#invertCB");
-	invertCB.onchange = function(e){
-		DRAW_PARAMS.invert = invertCB.checked;
-	}
-	invertCB.dispatchEvent(new Event("change"));
-
-	//Emboss
-	let embossCB = document.querySelector("#embossCB");
-	embossCB.onchange = function(e){
-		DRAW_PARAMS.emboss = embossCB.checked;
-	}
-	embossCB.dispatchEvent(new Event("change"));
-
-	//Keyboard controls
-	document.addEventListener("keypress", function(e){
-		keyPressed(e);
-	});
 }
 
 function initDragAndDrop(){
@@ -149,12 +102,7 @@ function initDragAndDrop(){
 	});
 }
 
-function keyPressed(e){
-	//Spacebar:	Play/Pause
-	if (e.keyCode == 32){
-		document.querySelector("#playButton").dispatchEvent(new Event("click"));
-	}
-}
+
 
 function loop(){
 	requestAnimationFrame(loop);
@@ -177,4 +125,4 @@ function exitFullscreen() {
 	document.exitFullscreen();
 }
 
-export {init, enterFullscreen, exitFullscreen};
+export {init, enterFullscreen, exitFullscreen, DRAW_PARAMS, SPECTRUM_SECTIONS};
