@@ -178,15 +178,6 @@ function drawWaveform(drawParams = {}, waveData){
 }
 
 function applyFilters(ctx, params){
-	// 6 - bitmap manipulation
-	// TODO: right now. we are looping though every pixel of the canvas (320,000 of them!), 
-	// regardless of whether or not we are applying a pixel effect
-	// At some point, refactor this code so that we are looping though the image data only if
-	// it is necessary
-
-	// A) grab all of the pixels on the canvas and put them in the `data` array
-	// `imageData.data` is a `Uint8ClampedArray()` typed array that has 1.28 million elements!
-	// the variable `data` below is a reference to that array 
 	let imgData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
 	let data = imgData.data;
 	let length = data.length;
@@ -204,16 +195,16 @@ function applyFilters(ctx, params){
 	// B) Iterate through each pixel, stepping 4 elements at a time (which is the RGBA for 1 pixel)
 	for (let i = 0; i < length; i += 4){
 		// C) randomly change every 20th pixel to red
-		if (params.showNoise && Math.random() < 0.05){
-			// data[i] is the red channel
-			// data[i+1] is the green channel
-			// data[i+2] is the blue channel
-			// data[i+3] is the alpha channel
-			// zero out the red and green and blue channels
-			// make the red channel 100% red
-			data[i + 1] = data[i + 2] = 0;
-			data[i] = 255;
-		}
+		// if (params.showNoise && Math.random() < 0.05){
+		// 	// data[i] is the red channel
+		// 	// data[i+1] is the green channel
+		// 	// data[i+2] is the blue channel
+		// 	// data[i+3] is the alpha channel
+		// 	// zero out the red and green and blue channels
+		// 	// make the red channel 100% red
+		// 	data[i + 1] = data[i + 2] = 0;
+		// 	data[i] = 255;
+		// }
 
 		//Invert colors
 		if (params.invert){

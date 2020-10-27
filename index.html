@@ -45,19 +45,23 @@
 				
 			</section> -->
 
-			<section id="playbackControls">
+			<section id="controls">
 				<section id="volumeControls">
 					<button id="volumeIndicator" data-muted="false"><i class='fas fa-volume-down'></i></button>
 					<input type="range" id="volumeSlider" min="0" max="2" value="0.5" step="0.01">
 				</section>
 				<section id="trackControls">
-					<p>Drag and drop anywhere or select   </p>
-					<select id="trackSelect">
-						<option value="./media/New Adventure Theme.mp3" selected>New Adventure Theme</option>
-						<option value="./media/Peanuts Theme.mp3">Peanuts Theme</option>
-						<option value="./media/The Picard Song.mp3">The Picard Song</option>
-					</select>
-					<button id="playButton" data-playing="no"><i class="fas fa-play"></i></button>
+					<!-- <p>Drag and drop anywhere or select   </p> -->
+					<section id="playback">
+						<select id="trackSelect">
+							<option value="./media/Mozart Concerto No21.mp3" selected>"Mozart Concerto No. 21"</option>
+							<option value="./media/Peanuts Theme.mp3">"Peanuts Theme"</option>
+							<option value="./media/The Picard Song.mp3">"The Picard Song"</option>
+							<option value="@mic">User Microphone</option>
+						</select>
+						<button id="playButton" data-playing="no"><i class="fas fa-play"></i></button>
+					</section>
+					<input type="range" id="timelineSlider" min="0" max="1" value="0" step="0.00001">
 				</section>
 				<section id="options">
 					<button id="fullscreenButton"><i class="fas fa-expand"></i></button>
@@ -67,10 +71,45 @@
 			</section>
 
 			<section id="menu" data-hidden="true">
-				<span><input type="checkbox" id="waveformCB" checked><label for="waveformCB">Show Waveform</label></span>
-				<span><input type="checkbox" id="noiseCB"><label for="noiseCB">Show Noise</label></span>
-				<span><input type="checkbox" id="invertCB"><label for="invertCB">Invert Colors</label></span>
-				<span><input type="checkbox" id="embossCB"><label for="embossCB">Emboss</label></span>
+				<section id="imageEffects">
+					<h2>Visual Effects</h2>
+					<span><input type="checkbox" id="waveformCB" checked><label for="waveformCB">Show Waveform</label></span>
+					<span><input type="checkbox" id="invertCB"><label for="invertCB">Invert Colors</label></span>
+					<span><input type="checkbox" id="embossCB"><label for="embossCB">Emboss</label></span>	
+				</section>
+
+				<section id="displaySettings">
+					<h2>Display Settings</h2>
+					<span>
+						<label for="waveformCB">Spectrum Bar Speed</label>
+						<input type="range" id="barSpeedSlider" min="1" max="30" value="3" step="0.01">
+					</span>
+					
+
+				</section>
+
+				<section id="audioSettings">
+					<h2>Audio Settings</h2>
+					<span>
+						<label for="waveformCB">Distortion</label>
+						<input type="range" id="barSpeedSlider" min="1" max="30" value="3" step="0.01">
+					</span>
+					
+
+				</section>
+
+				<section id="instructions">
+					<h2>Usage Tips</h2>
+					<ul>
+						<li>You can drag and drop an audio file anywhere on the page to play it</li>
+						<li>Clicking the volume icon will mute the playback without overwriting the current volume setting. Clicking again will return it to its previous volume.</li>
+					</ul>
+					<p>Keyboard shortcuts</p>
+					<ul>
+						<li><b>[Spacebar]</b>: play/pause a track</li>
+						<li><b>[Esc]</b>: open/close the menu</li>
+					</ul>
+				</section>
 
 				<button id="closeMenuButton"><i class="fas fa-times"></i></button>
 			</section>

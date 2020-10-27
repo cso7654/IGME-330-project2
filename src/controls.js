@@ -3,11 +3,12 @@ import * as audio from "./audio.js";
 import * as utils from "./utils.js";
 import * as main from "./main.js";
 
-let controlElement, playButton, volumeIndicator, volumeSlider, fullscreenButton, menuButton, menuSection;
+let controlElement, playButton, volumeIndicator, volumeSlider, fullscreenButton, menuButton, closeMenuButton, menuSection, barSpeedSlider, trackSelect,
+	timelineSlider;
 let hideTime = 120, timeShown = 0;
 
 function init(){
-	controlElement = document.querySelector("#playbackControls");
+	controlElement = document.querySelector("#controls");
 	menuSection = document.querySelector("section#menu");
 	
 	//Mouse events
@@ -53,13 +54,6 @@ function init(){
 			audio.mute();
 			updateVolumeIndicator();
 		});
-		volumeSlider = document.querySelector("#volumeSlider");
-		volumeSlider.addEventListener("input", function(e){
-			audio.setVolume(e.target.value);
-			volumeIndicator.dataset.muted = "false";
-			updateVolumeIndicator();
-		});
-		volumeSlider.dispatchEvent(new Event("input"));
 
 		fullscreenButton = document.querySelector("#fullscreenButton");
 		fullscreenButton.addEventListener("click", function(e){
@@ -69,6 +63,12 @@ function init(){
 		menuButton = document.querySelector("#menuButton");
 		menuButton.addEventListener("click", function(e){
 			toggleMenu();
+		});
+
+		closeMenuButton = document.querySelector("#closeMenuButton");
+		closeMenuButton.addEventListener("click", function(e){
+			closeMenu();
+			showControls();
 		});
 	}
 	initButtons();
@@ -81,13 +81,6 @@ function init(){
 			main.DRAW_PARAMS.showWaveform = waveformCB.checked;
 		}
 		waveformCB.dispatchEvent(new Event("change"));
-	
-		//Noise
-		let noiseCB = document.querySelector("#noiseCB");
-		noiseCB.onchange = function(e){
-			main.DRAW_PARAMS.showNoise = noiseCB.checked;
-		}
-		noiseCB.dispatchEvent(new Event("change"));
 	
 		//Invert
 		let invertCB = document.querySelector("#invertCB");
@@ -104,6 +97,48 @@ function init(){
 		embossCB.dispatchEvent(new Event("change"));
 	}
 	initCheckboxes();
+
+	//Sliders
+	function initSliders(){
+		volumeSlider = document.querySelector("#volumeSlider");
+		volumeSlider.addEventListener("input", function(e){
+			audio.setVolume(e.target.value);
+			volumeIndicator.dataset.muted = "false";
+			updateVolumeIndicator();
+		});
+		volumeSlider.dispatchEvent(new Event("input"));
+
+		barSpeedSlider = document.querySelector("#barSpeedSlider");
+		barSpeedSlider.addEventListener("input", function(e){
+			main.DRAW_PARAMS.sectionsPerFrame = e.target.value;
+		});
+		barSpeedSlider.dispatchEvent(new Event("input"));
+
+		timelineSlider = document.querySelector("#timelineSlider");
+		timelineSlider.addEventListener("input", function(e){
+			audio.setTime(e.target.value * audio.getDuration());
+		});
+	}
+	initSliders();
+
+	//Track select
+	trackSelect = document.querySelector("#trackSelect");
+	trackSelect.onchange = function(e){
+		let val = e.target.value;
+		if (val[0] == "@"){
+			switch(val){
+				case "@mic":
+					audio.activateMicrophone();
+					break;
+			}
+		}else{
+			audio.loadSoundFile(e.target.value);
+		}
+
+		if (playButton.dataset.playing = "yes"){
+			playButton.dispatchEvent(new Event("click"));
+		}
+	}
 
 	//Loop through all buttons and inputs and add event listeners to blur() any of them so focus does not disturb key events
 	for (let el of document.querySelectorAll("button")){
@@ -127,6 +162,9 @@ function addBlurEvents(el){
 	el.addEventListener("input", function(e){
 		el.blur();
 	});
+	el.addEventListener("change", function(e){
+		el.blur();
+	});
 }
 
 function keyDown(e){
@@ -135,9 +173,9 @@ function keyDown(e){
 		case " ":
 			togglePlay();
 			break;
-		//Escape: exit menu
+		//Escape: Toggle Menu
 		case "Escape":
-			closeMenu();
+			toggleMenu();
 			break;
 	}
 }
@@ -155,10 +193,10 @@ function openMenu(){
 }
 function closeMenu(){
 	menuSection.dataset.hidden = "true";
-
 }
 
 function update(){
+	//Timed close of controls
 	if (timeShown > 0){
 		timeShown--;
 	}else if (timeShown == -1){
@@ -168,9 +206,20 @@ function update(){
 		hideControls();
 	}
 
+	//Hide controls if menu is open
 	if (menuSection.dataset.hidden == "false"){
 		hideControls();
 	}
+
+	//Disable play/pause if microphone is active
+	if (audio.microphoneActive){
+		playButton.hidden = true;
+	}else{
+		playButton.hidden = false;
+	}
+
+	//Update timeline slider
+	timelineSlider.value = audio.getTime() / audio.getDuration();
 }
 
 function updateVolumeIndicator(){
@@ -193,32 +242,38 @@ function hideControls(){
 }
 
 function togglePlay(){
-	if (playButton.dataset.playing == "no"){
-		play();
-	}else{
-		pause();
+	if (!audio.microphoneActive){
+		if (playButton.dataset.playing == "no"){
+			play();
+		}else{
+			pause();
+		}
 	}
 }
 
 function play(){
-	if (audio.audioCtx.state == "suspended"){
-		audio.audioCtx.resume();
-	}
-	if (playButton.dataset.playing == "no"){
-		audio.playSound();
-		playButton.dataset.playing = "yes";
-		playButton.innerHTML = "<i class='fas fa-pause'></i>";
+	if (!audio.microphoneActive){
+		if (audio.audioCtx.state == "suspended"){
+			audio.audioCtx.resume();
+		}
+		if (playButton.dataset.playing == "no"){
+			audio.play();
+			playButton.dataset.playing = "yes";
+			playButton.innerHTML = "<i class='fas fa-pause'></i>";
+		}
 	}
 }
 
 function pause(){
-	if (audio.audioCtx.state == "suspended"){
-		audio.audioCtx.resume();
-	}
-	if (playButton.dataset.playing == "yes"){
-		audio.pauseSound();
-		playButton.dataset.playing = "no";
-		playButton.innerHTML = "<i class='fas fa-play'></i>";
+	if (!audio.microphoneActive){
+		if (audio.audioCtx.state == "suspended"){
+			audio.audioCtx.resume();
+		}
+		if (playButton.dataset.playing == "yes"){
+			audio.pause();
+			playButton.dataset.playing = "no";
+			playButton.innerHTML = "<i class='fas fa-play'></i>";
+		}
 	}
 }
 

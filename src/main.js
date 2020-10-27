@@ -1,17 +1,16 @@
 import * as audio from "./audio.js";
 import * as utils from "./utils.js";
 import * as canvas from "./canvas.js";
-import * as playback from "./controls.js";
+import * as controls from "./controls.js";
 
 // 1 - here we are faking an enumeration
 const DEFAULTS = Object.freeze({
 	//sound1  :  "/media/mozart-symphony40-1.mp3"
-	sound1: "./media/New Adventure Theme.mp3"
+	sound1: "./media/Mozart Concerto No21.mp3"
 });
 
 const DRAW_PARAMS = {
 	showWaveform		: true,
-	showNoise			: false,
 	invert				: false,
 	emboss				: false,
 	trailSegmentSize	: 10,
@@ -44,13 +43,9 @@ window.onload = function(e){
 }
 
 function init(){
-	// window.alert("PROTOTYPE MESSAGE:\n" +
-	// 				"Space will pause/play\n" +
-	// 				"Drag and drop anywhere to upload a file");
-
 	audio.init(DEFAULTS.sound1);
 	audio.SOUND_PARAMS.sampleRate = audio.audioCtx.sampleRate;
-	//Update brilliance frequency stop so avoid errors with sound chips that don't have that high of a frequency
+	//Update brilliance frequency stop to be the maximum frequency
 	SPECTRUM_SECTIONS.brilliance.frequemcy = audio.SOUND_PARAMS.sampleRate;
 	
 	let canvasElement = document.querySelector("canvas"); // hookup <canvas> element
@@ -59,14 +54,16 @@ function init(){
 	//Modify draw params to match canvas size
 	DRAW_PARAMS.minTrailWidth = canvas.canvasWidth / 8 / 75;
 	DRAW_PARAMS.maxTrailWidth = canvas.canvasWidth / 8;
-	DRAW_PARAMS.trailSegmentSize = canvas.canvasHeight / 250;
-	DRAW_PARAMS.sectionsPerFrame = 3;
+	DRAW_PARAMS.trailSegmentSize = canvas.canvasHeight / 500;
+	DRAW_PARAMS.sectionsPerFrame = 5;
 	DRAW_PARAMS.waveformY = canvas.canvasHeight / 2;
 	DRAW_PARAMS.waveformHeight = canvas.canvasHeight / 3;
 	DRAW_PARAMS.waveformThickness = canvas.canvasWidth / audio.SOUND_PARAMS.analyzerSamples * 4;
 	//Set up the playback controls
-	playback.init();
+	controls.init();
 	loop();
+
+	//audio.activateMicrophone();
 }
 
 function setupUI(canvasElement){
@@ -74,17 +71,6 @@ function setupUI(canvasElement){
 	//Set up drag and drop
 	initDragAndDrop();
 
-	//Hookup track select
-	let trackSelect = document.querySelector("#trackSelect");
-
-	//onchange event
-	trackSelect.onchange = function(e){
-		audio.loadSoundFile(e.target.value);
-		//Pause if playing
-		if (playback.playButton.dataset.playing == "yes"){
-			playback.playButton.dispatchEvent(new Event("click"));
-		}
-	}
 }
 
 function initDragAndDrop(){
@@ -98,7 +84,8 @@ function initDragAndDrop(){
 		let file = e.dataTransfer.files[0];
 		let url = blob.createObjectURL(file);
 		audio.loadSoundFile(url);
-		playback.play();
+		controls.pause();
+		controls.play();
 	});
 }
 
@@ -114,7 +101,7 @@ function loop(){
 	//console.log(sectionValues);
 	canvas.draw(DRAW_PARAMS, SPECTRUM_SECTIONS, audio.getWaveformData());
 		
-	playback.update();
+	controls.update();
 }
 
 function enterFullscreen() {

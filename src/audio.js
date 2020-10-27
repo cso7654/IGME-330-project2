@@ -1,7 +1,9 @@
 let audioElement, audioCtx;
-let sourceNode, analyserNode, gainNode, volume;
+let mediaSourceNode, streamSourceNode, analyserNode, gainNode, volume;
 
 let frequencyData, waveformData;
+
+let microphoneActive;
 
 const SOUND_PARAMS = {
 	gain					: 0.5,
@@ -10,10 +12,15 @@ const SOUND_PARAMS = {
 }
 
 function init(filePath){
+	createContext();
+	activateMedia();
+	//hookupNodes();
+	loadSoundFile(filePath);
+}
+
+function createContext(){
 	audioCtx = new (window.AudioContext || window.webkitAudioContext);
 	audioElement = new Audio();
-
-	sourceNode = audioCtx.createMediaElementSource(audioElement);
 
 	analyserNode = audioCtx.createAnalyser();
 	gainNode = audioCtx.createGain();
@@ -21,25 +28,78 @@ function init(filePath){
 
 	analyserNode.fftSize = SOUND_PARAMS.analyzerSamples;
 
-	sourceNode.connect(gainNode);
-	gainNode.connect(analyserNode);
-	analyserNode.connect(audioCtx.destination);
-
 	frequencyData = new Uint8Array(analyserNode.fftSize / 2);
 	waveformData = new Uint8Array(analyserNode.frequencyBinCount);
+}
 
-	loadSoundFile(filePath);
+function hookupNodes(source){
+	source.connect(gainNode);
+	gainNode.connect(analyserNode);
+	analyserNode.connect(audioCtx.destination);
+}
+
+function activateMicrophone(){
+	pause();
+	microphoneActive = true;
+
+	navigator.mediaDevices.getUserMedia({audio: true, video: false})
+		.then(function(stream){
+			disconnectSourceNodes();
+			window.streamReference = stream;
+			streamSourceNode = audioCtx.createMediaStreamSource(stream);
+			hookupNodes(streamSourceNode);
+		})
+		.catch(function(err){
+			console.log('Error initializing user media stream: ' + err)
+		});
+}
+
+function closeMicrophone(){
+	microphoneActive = false;
+
+	if (window.streamReference) {
+		for (let track of window.streamReference.getAudioTracks()){
+			track.stop();
+		}
+	
+		window.streamReference = null;
+	}
+}
+
+function activateMedia(){
+	closeMicrophone();
+
+	disconnectSourceNodes();
+	if (mediaSourceNode == undefined){
+		mediaSourceNode = audioCtx.createMediaElementSource(audioElement);
+	}
+	hookupNodes(mediaSourceNode);
+}
+
+function disconnectSourceNodes(){
+	if (mediaSourceNode != undefined){
+		mediaSourceNode.disconnect();
+	}
+	if (streamSourceNode != undefined){
+		streamSourceNode.disconnect();
+	}
 }
 
 function loadSoundFile(path){
+	if (microphoneActive){
+		activateMedia()
+	}
 	audioElement.src = path;
 }
 
-function playSound(){
+function play(){
+	if (microphoneActive){
+		activateMedia();
+	}
 	audioElement.play();
 }
 
-function pauseSound(){
+function pause(){
 	audioElement.pause();
 }
 
@@ -66,5 +126,17 @@ function getWaveformData(){
 	return waveformData;
 }
 
-export {init, loadSoundFile, playSound, pauseSound, setVolume, getFrequencyData, getWaveformData, mute,
-	 analyserNode, audioCtx, SOUND_PARAMS}
+function getTime(){
+	return audioElement.currentTime;
+}
+
+function setTime(time){
+	audioElement.currentTime = time;
+}
+
+function getDuration(){
+	return audioElement.duration;
+}
+
+export {init, loadSoundFile, play, pause, setVolume, getFrequencyData, getWaveformData, mute, activateMicrophone, getTime, setTime, getDuration, 
+	 audioElement, analyserNode, audioCtx, microphoneActive, SOUND_PARAMS}

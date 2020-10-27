@@ -58,7 +58,7 @@ canvas {
 }
 
 
-#playbackControls{
+#controls{
 	width: 100%;
 	position: fixed;
 	bottom: 0;
@@ -78,49 +78,69 @@ canvas {
 
 	transition: opacity 0.5s;
 }
-#playbackControls[data-hidden="true"]{
+#controls[data-hidden="true"]{
 	opacity: 0;
 }
 
-#playbackControls button, section#menu #closeMenuButton{
+#controls button, section#menu #closeMenuButton{
 	color: white;
 	background-color: rgba(0, 0, 0, 0);
 	border: none;
 	outline: none;
 	cursor: pointer;
-	font-size: 3rem;
+	font-size: 2rem;
 	height: 100%;
-	width: 5rem;
+	width: 3rem;
 	line-height: 100%;
 	margin: 0;
 	
 	font-family: sans-serif;
 }
-#playbackControls>section{
+#controls>section{
 	height: 100%;
 	line-height: 100%;
 	margin: 0;
 	padding: 0rem 1rem 0rem 1rem;
 }
-#playbackControls>#volumeControls{
+#controls>#volumeControls{
 	margin-right: auto;
 	display: flex;
 	align-items: center;
 }
-#playbackControls>#options{
+#controls>#options{
 	margin-left: auto;
 }
-#playbackControls>#trackControls{
+#trackControls{
 	z-index: 10;
 	position: absolute;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+#trackControls section{
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
 }
-#trackControls>select{
-	width: 8rem;
+section#playback{
+	height: 2rem;
+	width: 50vw;
+}
+#trackControls input[type="range"]{
+	width: 100%;
+	margin-bottom: 0.25rem;
+}
+
+#trackControls select{
+	width: 20rem;
 	margin: 0;
+	font-size: 1rem;
+	padding: 0.25rem;
+	border: white;
+	color: white;
+	background-color: #222;
 }
 
 #volumeIndicator[data-muted="true"]{
@@ -157,8 +177,14 @@ section#menu{
 	opacity: 1;
 	visibility: visible;
 	color: white;
+
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: flex-start;
+	flex-wrap: wrap;
 	
-	transition: opacity 0.5s;
+	transition: opacity 0.5s, visibility 0.5s;
 }
 section#menu[data-hidden="true"]{
 	opacity: 0;
@@ -166,9 +192,24 @@ section#menu[data-hidden="true"]{
 }
 
 section#menu #closeMenuButton{
-	position: absolute;
+	position: fixed;
 	right: 0;
 	bottom: 0;
 	margin-right: 1rem;
 	height: 5rem;
+}
+
+section#menu section{
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	font-size: 1.5rem;
+	margin: 1rem;
+	width: calc(25% - 2rem);
+	min-width: 10rem;
+}
+
+input[type="checkbox"]{
+	width: 1.5rem;
+	height: 1.5rem;
 }
