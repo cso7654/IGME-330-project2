@@ -65,8 +65,21 @@ function calcSectionValues(audioData, soundParams = {}, spectrumSections = {}){
 			section.value += audioData[i];
 		}
 		section.value /= samples - previousSamples;
-		previousSamples = samples;
+		previousSamples = samples + 1;
 	}
 }
+
+function calcDBFromAmplitude(amplitude){
+	return 20 * Math.log10(Math.pow(amplitude, 4) * 60);
+}
+
+function getMousePos(canvas, e) {
+	let rect = canvas.getBoundingClientRect();
   
-export {makeColor, getRandomColor, getLinearGradient, toggleFullscreen, getSampleValue, calcSectionValues};
+	return {
+		x: (e.clientX - rect.left) * (canvas.width / rect.width),
+		y: (e.clientY - rect.top) * (canvas.height / rect.height)
+	}
+}
+
+export {makeColor, getRandomColor, getLinearGradient, toggleFullscreen, getSampleValue, calcSectionValues, calcDBFromAmplitude, getMousePos};

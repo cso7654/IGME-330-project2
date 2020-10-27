@@ -11,39 +11,7 @@
 	</head>
 	<body>
 		<main>
-			<canvas width="800" height="400"></canvas>
-
-			<!-- <section id="eqSliders">
-				<section id="subBassEQ">
-					<input type="range" id="subBassSlider" name="subBassSlider" min="0" max="2" value="1" step="0.01">
-					<label for="subBassSlider">SUB BASS</label>
-				</section>
-				<section id="bassEQ">
-					<input type="range" id="bassSlider" name="bassSlider" min="0" max="2" value="1" step="0.01">
-					<label for="bassSlider">BASS</label>
-				</section>
-				<section id="lowMidEQ">
-					<input type="range" id="lowMidSlider" name="lowMidSlider" min="0" max="2" value="1" step="0.01">
-					<label for="lowMidSlider">LOW MID</label>
-				</section>
-				<section id="midEQ">
-					<input type="range" id="midSlider" name="midSlider" min="0" max="2" value="1" step="0.01">
-					<label for="midSlider">MID</label>
-				</section>
-				<section id="highMidEQ">
-					<input type="range" id="highMidSlider" name="highMidSlider" min="0" max="2" value="1" step="0.01">
-					<label for="highMidSlider">HIGH MID</label>
-				</section>
-				<section id="trebleEQ">
-					<input type="range" id="trebleSlider" name="trebleSlider" min="0" max="2" value="1" step="0.01">
-					<label for="trebleSlider">TREBLE</label>
-				</section>
-				<section id="brillianceEQ">
-					<input type="range" id="brillianceSlider" name="brillianceSlider" min="0" max="2" value="1" step="0.01">
-					<label for="brillianceSlider">BRILLIANCE</label>
-				</section>
-				
-			</section> -->
+			<canvas width="800" height="400" id="main"></canvas>
 
 			<section id="controls">
 				<section id="volumeControls">
@@ -55,6 +23,7 @@
 					<section id="playback">
 						<select id="trackSelect">
 							<option value="./media/Mozart Concerto No21.mp3" selected>"Mozart Concerto No. 21"</option>
+							<option value="./media/New Adventure Theme.mp3">"New Adventure Theme"</option>
 							<option value="./media/Peanuts Theme.mp3">"Peanuts Theme"</option>
 							<option value="./media/The Picard Song.mp3">"The Picard Song"</option>
 							<option value="@mic">User Microphone</option>
@@ -89,30 +58,43 @@
 				</section>
 
 				<section id="audioSettings">
-					<h2>Audio Settings</h2>
+					<h2>Audio Effects</h2>
 					<span>
-						<label for="waveformCB">Distortion</label>
-						<input type="range" id="barSpeedSlider" min="1" max="30" value="3" step="0.01">
+						<label for="distortionSlider">Distortion</label>
+						<input type="range" id="distortionSlider" min="0" max="1" value="0" step="0.01">
 					</span>
-					
+					<button id="equalizerButton">Open Equalizer...</button>
 
 				</section>
 
 				<section id="instructions">
 					<h2>Usage Tips</h2>
 					<ul>
-						<li>You can drag and drop an audio file anywhere on the page to play it</li>
+						<li>You can drag and drop an audio file anywhere on the page to play it.</li>
 						<li>Clicking the volume icon will mute the playback without overwriting the current volume setting. Clicking again will return it to its previous volume.</li>
+						<li>Streaming from the microphone will automatically stream from your currently selected input device.</li>
+						<li>With the equalizer open, you can simply click and drag the 3 sections around with the mouse.</li>
 					</ul>
-					<p>Keyboard shortcuts</p>
+					<h3>Keyboard shortcuts</h3>
 					<ul>
 						<li><b>[Spacebar]</b>: play/pause a track</li>
 						<li><b>[Esc]</b>: open/close the menu</li>
+						<li><b>[E]</b>: open/close the equalizer</li>
 					</ul>
 				</section>
 
+
 				<button id="closeMenuButton"><i class="fas fa-times"></i></button>
 			</section>
+
+			<section id="equalizer" data-hidden="true">
+				<canvas width="800" height="400" id="equalizerCanvas"></canvas>
+				<section id="equalizerButtons">
+					<button id="resetEqualizerButton"><i class="fas fa-undo"></i></button>
+					<button id="closeEqualizerButton"><i class="fas fa-times"></i></button>
+				</section>
+			</section>
+
 		</main>
 	</body>
 </html>
